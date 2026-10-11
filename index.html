@@ -75,11 +75,19 @@ button { cursor: pointer; }
 .hero-sub { margin: 14px 0 0; color: var(--text-dim); font-size: 1.05rem; line-height: 1.6; }
 .generator-section { max-width: 640px; margin: 0 auto; padding: 0 20px 56px; display: flex; flex-direction: column; gap: 20px; }
 .generator-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 22px; }
-.tabs { display: flex; gap: 4px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 4px; margin-bottom: 18px; }
-.tab { flex: 1; min-width: 0; min-height: 44px; border: none; background: transparent; padding: 8px 4px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; color: var(--text-dim); }
-.tab:hover:not(:disabled) { color: var(--text); }
-.tab[aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-.tab:disabled { cursor: not-allowed; opacity: 0.6; }
+.picker { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.picker li { display: flex; }
+.pick { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; width: 100%; min-height: 56px; padding: 12px; text-align: left; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-md); }
+.pick:hover:not(:disabled) { border-color: var(--accent); }
+.pick[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.pick:disabled { cursor: not-allowed; opacity: 0.6; }
+.pick svg { color: var(--accent); }
+.pick b { font-family: var(--font-display); font-size: 0.95rem; }
+.pick small { display: none; color: var(--text-dim); font-size: 0.8rem; line-height: 1.35; }
+@media (min-width: 721px) {
+  .picker { grid-template-columns: repeat(4, 1fr); }
+  .pick small { display: block; }
+}
 .hint { font-size: 0.85rem; color: var(--text-dim); margin: 0 0 14px; }
 .hint.bad { color: var(--danger); }
 .hint.good { color: var(--success); }
@@ -173,6 +181,7 @@ dialog form { margin-top: 16px; }
   .footer-top { display: inline; }
 }
 </style>
+<script data-goatcounter="https://seluminaid.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 
@@ -200,16 +209,15 @@ dialog form { margin-top: 16px; }
   </section>
 
   <section class="generator-section" id="generator">
+    <ul class="picker" aria-label="PDF tools">
+      <li><button type="button" class="pick" data-tool="merge" aria-pressed="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="11" height="11" rx="2"/><rect x="10" y="10" width="11" height="11" rx="2"/></svg><b data-i18n="tool_merge">Merge PDF</b><small data-i18n="pick_merge_d">Combine PDFs into one</small></button></li>
+      <li><button type="button" class="pick" data-tool="split" aria-pressed="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M3 13h18" stroke-dasharray="3 3"/></svg><b data-i18n="tool_split">Split PDF</b><small data-i18n="pick_split_d">Extract specific pages</small></button></li>
+      <li><button type="button" class="pick" data-tool="compress" aria-pressed="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l6 6M10 5v5H5M20 20l-6-6M14 19v-5h5"/></svg><b data-i18n="tool_compress">Compress PDF</b><small data-i18n="pick_compress_d">Reduce file size</small></button></li>
+      <li><button type="button" class="pick" data-tool="rotate" aria-pressed="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v5h-5"/></svg><b data-i18n="tool_rotate">Rotate PDF</b><small data-i18n="pick_rotate_d">Turn pages around</small></button></li>
+    </ul>
     <div class="generator-card">
 
-      <div class="tabs" role="tablist" id="tablist" aria-label="PDF tools">
-        <button class="tab" role="tab" id="tab-merge" data-tool="merge" aria-selected="true" aria-controls="panel" data-i18n="tab_merge">Merge</button>
-        <button class="tab" role="tab" id="tab-split" data-tool="split" aria-selected="false" aria-controls="panel" tabindex="-1" data-i18n="tab_split">Split</button>
-        <button class="tab" role="tab" id="tab-compress" data-tool="compress" aria-selected="false" aria-controls="panel" tabindex="-1" data-i18n="tab_compress">Compress</button>
-        <button class="tab" role="tab" id="tab-rotate" data-tool="rotate" aria-selected="false" aria-controls="panel" tabindex="-1" data-i18n="tab_rotate">Rotate</button>
-      </div>
-
-      <div id="panel" role="tabpanel" aria-labelledby="tab-merge">
+      <div id="panel">
         <p class="hint" id="toolDesc"></p>
 
         <label id="dz" class="dz" for="fileInput" tabindex="0">
@@ -354,7 +362,7 @@ dialog form { margin-top: 16px; }
 
 <dialog id="privacyDlg">
   <h3 data-i18n="footer_privacy">Privacy Policy</h3>
-  <p data-i18n="privacy_body">Your files are processed in your browser and are not uploaded to a server by this app. Documents are not stored on your device and are gone when you close or reload the page. SePDF has no analytics and does not log document contents.</p>
+  <p data-i18n="privacy_body">Your files are processed in your browser and are not uploaded to a server by this app. Documents are not stored on your device and are gone when you close or reload the page. SePDF does not log document contents. We count visits anonymously with GoatCounter (pages viewed, country, browser and device type). It uses no cookies and never sees the contents of your files.</p>
   <form method="dialog"><button class="btn btn-ghost" data-i18n="modal_close">Close</button></form>
 </dialog>
 <dialog id="termsDlg">
@@ -388,7 +396,6 @@ const LANG_KEY = 'sepdf-lang';
 const THEME_KEY = 'sepdf-theme';
 const LIMITS = { file: 100 * 1048576, total: 250 * 1048576 };
 const LEVELS = { low: { q: 0.85, s: 1 }, medium: { q: 0.7, s: 0.9 }, high: { q: 0.5, s: 0.75 } };
-const TOOL_ORDER = ['merge', 'split', 'compress', 'rotate'];
 const TOOLS = {
   merge: { multi: true },
   split: { multi: false },
@@ -401,7 +408,7 @@ const I18N = {
     aria_theme: 'Switch theme',
     hero_title: 'Your PDF, Simplified.',
     hero_sub: 'Merge, split, compress, and rotate PDF documents easily, right in your browser.',
-    tab_merge: 'Merge', tab_split: 'Split', tab_compress: 'Compress', tab_rotate: 'Rotate',
+    pick_merge_d: 'Combine PDFs into one', pick_split_d: 'Extract specific pages', pick_compress_d: 'Reduce file size', pick_rotate_d: 'Turn pages around',
     desc_merge: 'Combine two or more PDFs into one document. The order of the list sets the order of the pages.',
     desc_split: 'Extract the pages you need from a PDF into a new document.',
     desc_compress: 'Shrink a PDF that contains JPEG images, such as scans and photos.',
@@ -458,7 +465,7 @@ const I18N = {
     footer_tag: 'Simple tools for everyday digital needs.',
     footer_suite: 'SeLuminaID Products', footer_top: 'Back to top', footer_company: 'Company',
     nav_about: 'About', footer_contact: 'Contact', footer_privacy: 'Privacy Policy', footer_terms: 'Terms of Service',
-    privacy_body: 'Your files are processed in your browser and are not uploaded to a server by this app. Documents are not stored on your device and are gone when you close or reload the page. SePDF has no analytics and does not log document contents.',
+    privacy_body: 'Your files are processed in your browser and are not uploaded to a server by this app. Documents are not stored on your device and are gone when you close or reload the page. SePDF does not log document contents. We count visits anonymously with GoatCounter (pages viewed, country, browser and device type). It uses no cookies and never sees the contents of your files.',
     terms_body: 'SePDF is provided as-is, free of charge. You are responsible for the documents you process. Your original files are never changed or deleted, but keep a backup before replacing important documents.',
     modal_close: 'Close'
   },
@@ -466,7 +473,7 @@ const I18N = {
     aria_theme: 'Ganti tema',
     hero_title: 'Semua Urusan PDF, Lebih Simpel.',
     hero_sub: 'Gabungkan, pisahkan, kompres, dan putar dokumen PDF dengan mudah, langsung di browser Anda.',
-    tab_merge: 'Gabung', tab_split: 'Pisah', tab_compress: 'Kompres', tab_rotate: 'Putar',
+    pick_merge_d: 'Gabungkan PDF jadi satu', pick_split_d: 'Ambil halaman tertentu', pick_compress_d: 'Perkecil ukuran file', pick_rotate_d: 'Putar halaman',
     desc_merge: 'Gabungkan dua PDF atau lebih menjadi satu dokumen. Urutan daftar menentukan urutan halaman.',
     desc_split: 'Ambil halaman yang Anda perlukan dari sebuah PDF menjadi dokumen baru.',
     desc_compress: 'Perkecil PDF yang berisi gambar JPEG, seperti hasil scan dan foto.',
@@ -523,7 +530,7 @@ const I18N = {
     footer_tag: 'Alat sederhana untuk kebutuhan digital sehari-hari.',
     footer_suite: 'Produk SeLuminaID', footer_top: 'Kembali ke atas', footer_company: 'Perusahaan',
     nav_about: 'Tentang', footer_contact: 'Kontak', footer_privacy: 'Kebijakan Privasi', footer_terms: 'Ketentuan Layanan',
-    privacy_body: 'File Anda diproses di browser dan tidak diunggah ke server oleh aplikasi ini. Dokumen tidak disimpan di perangkat dan hilang saat halaman ditutup atau dimuat ulang. SePDF tidak memakai analitik dan tidak mencatat isi dokumen.',
+    privacy_body: 'File Anda diproses di browser dan tidak diunggah ke server oleh aplikasi ini. Dokumen tidak disimpan di perangkat dan hilang saat halaman ditutup atau dimuat ulang. SePDF tidak mencatat isi dokumen. Kami menghitung kunjungan secara anonim dengan GoatCounter (halaman yang dibuka, negara, browser, dan jenis perangkat). Layanan ini tidak memakai cookie dan tidak pernah melihat isi file Anda.',
     terms_body: 'SePDF disediakan apa adanya, gratis. Anda bertanggung jawab atas dokumen yang Anda proses. File asli tidak pernah diubah atau dihapus, tetapi simpan cadangan sebelum menimpa dokumen penting.',
     modal_close: 'Tutup'
   }
@@ -746,13 +753,10 @@ function refresh() {
   $('rotRangeBox').hidden = document.querySelector('input[name="rscope"]:checked').value !== 'some';
   $('runBtn').textContent = t('run_' + tool);
   $('runBtn').disabled = !canRun();
-  document.querySelectorAll('.tab').forEach((b) => {
-    const on = b.dataset.tool === tool;
-    b.setAttribute('aria-selected', String(on));
-    b.tabIndex = on ? 0 : -1;
+  document.querySelectorAll('.pick').forEach((b) => {
+    b.setAttribute('aria-pressed', String(b.dataset.tool === tool));
     b.disabled = state.busy;
   });
-  $('panel').setAttribute('aria-labelledby', 'tab-' + tool);
   renderList();
   renderHints();
   renderErrors();
@@ -979,7 +983,7 @@ async function run() {
   }
 }
 
-function selectTool(name, focusTab) {
+function selectTool(name) {
   if (state.busy || !TOOLS[name] || name === state.tool) return;
   state.tool = name;
   state.items = [];
@@ -989,20 +993,10 @@ function selectTool(name, focusTab) {
   $('rotRange').value = '';
   refresh();
   idleStatus();
-  if (focusTab) $('tab-' + name).focus();
 }
 
 function bindTabs() {
   document.querySelectorAll('[data-tool]').forEach((el) => el.addEventListener('click', () => selectTool(el.dataset.tool)));
-  $('tablist').addEventListener('keydown', (e) => {
-    const i = TOOL_ORDER.indexOf(state.tool);
-    let n = -1;
-    if (e.key === 'ArrowRight') n = (i + 1) % TOOL_ORDER.length;
-    if (e.key === 'ArrowLeft') n = (i + TOOL_ORDER.length - 1) % TOOL_ORDER.length;
-    if (e.key === 'Home') n = 0;
-    if (e.key === 'End') n = TOOL_ORDER.length - 1;
-    if (n >= 0) { e.preventDefault(); selectTool(TOOL_ORDER[n], true); }
-  });
 }
 
 function bindDropzone() {
