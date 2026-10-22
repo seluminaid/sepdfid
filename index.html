@@ -111,7 +111,7 @@ button { cursor: pointer; }
 .ib:disabled { opacity: 0.4; cursor: not-allowed; }
 .opts { margin-top: 16px; }
 .field { margin-bottom: 14px; }
-.field label, .field legend { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; padding: 0; color: var(--text-dim); }
+.field > label, .field legend { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; padding: 0; color: var(--text-dim); }
 fieldset { border: 0; margin: 0; padding: 0; }
 .field input[type="text"] { width: 100%; min-height: 46px; padding: 11px 13px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); font-size: 0.95rem; }
 .field input[type="text"]:focus { border-color: var(--accent); }
@@ -163,6 +163,7 @@ dialog form { margin-top: 16px; }
 .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: 1fr; gap: 24px; }
 .footer-brand p.footer-title { font-family: var(--font-display); font-weight: 700; margin: 0 0 6px; font-size: 1.05rem; }
 .footer-brand p.footer-tag { margin: 0; color: var(--text-dim); font-size: 0.88rem; max-width: 260px; }
+.footer-brand p.footer-credit { margin: 10px 0 0; color: var(--text-dim); font-size: 0.78rem; max-width: 300px; }
 .footer-col h4 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-dim); margin: 0 0 12px; font-weight: 700; }
 .footer-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .footer-col a, .footer-col button { background: none; border: none; padding: 0; text-align: left; font-size: 0.9rem; color: var(--text-dim); text-decoration: none; cursor: pointer; }
@@ -333,6 +334,7 @@ dialog form { margin-top: 16px; }
     <div class="footer-brand">
       <p class="footer-title">SePDF</p>
       <p class="footer-tag" data-i18n="footer_tag">Simple tools for everyday digital needs.</p>
+      <p class="footer-credit" data-i18n="footer_credit">Built with open-source pdf-lib (MIT).</p>
     </div>
     <div class="footer-col">
       <h4 data-i18n="footer_company">Company</h4>
@@ -349,6 +351,7 @@ dialog form { margin-top: 16px; }
         <li><a href="https://seluminaid.github.io/seqrcodeid/">SeQRCode</a></li>
         <li><a href="https://seluminaid.github.io/secompressid/">SeCompress</a></li>
         <li><a href="#top" aria-current="page">SePDF</a></li>
+        <li><a href="https://seluminaid.github.io/seocrid/">SeOCR</a></li>
       </ul>
     </div>
   </div>
@@ -462,6 +465,7 @@ const I18N = {
     tool_split: 'Split PDF', tool_split_d: 'Extract the pages you need into a new PDF.',
     tool_compress: 'Compress PDF', tool_compress_d: 'Shrink PDFs that contain JPEG images, like scans and photos.',
     tool_rotate: 'Rotate PDF', tool_rotate_d: 'Turn all pages or only specific ones.',
+    footer_credit: 'Built with open-source pdf-lib (MIT).',
     footer_tag: 'Simple tools for everyday digital needs.',
     footer_suite: 'SeLuminaID Products', footer_top: 'Back to top', footer_company: 'Company',
     nav_about: 'About', footer_contact: 'Contact', footer_privacy: 'Privacy Policy', footer_terms: 'Terms of Service',
@@ -527,6 +531,7 @@ const I18N = {
     tool_split: 'Pisah PDF', tool_split_d: 'Ambil halaman yang diperlukan menjadi PDF baru.',
     tool_compress: 'Kompres PDF', tool_compress_d: 'Perkecil PDF berisi gambar JPEG, seperti hasil scan dan foto.',
     tool_rotate: 'Putar PDF', tool_rotate_d: 'Putar semua halaman atau hanya halaman tertentu.',
+    footer_credit: 'Dibangun dengan pdf-lib yang open-source (MIT).',
     footer_tag: 'Alat sederhana untuk kebutuhan digital sehari-hari.',
     footer_suite: 'Produk SeLuminaID', footer_top: 'Kembali ke atas', footer_company: 'Perusahaan',
     nav_about: 'Tentang', footer_contact: 'Kontak', footer_privacy: 'Kebijakan Privasi', footer_terms: 'Ketentuan Layanan',
